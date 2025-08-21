@@ -2,7 +2,7 @@ package org.acme.model.location;
 
 import org.acme.model.BaseModel;
 
-public class LocationRequest extends BaseModel {
+public class LocationResponse extends BaseModel {
     private String name;
 
     private String type;
@@ -11,11 +11,9 @@ public class LocationRequest extends BaseModel {
 
     private String defaultPhone;
 
-    private Boolean enabled;
+    private boolean enabled;
 
-    private ContactRequest contactRequest;
-
-    public LocationRequest() {
+    public LocationResponse() {
     }
 
     public String getDefaultPhone() {
@@ -50,19 +48,11 @@ public class LocationRequest extends BaseModel {
         this.address = address;
     }
 
-    public Boolean getEnabled() {
+    public boolean isEnabled() {
         return enabled;
     }
 
-    public void setEnabled(Boolean enabled) {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-    }
-
-    public ContactRequest getContactRequest() {
-        return contactRequest;
-    }
-
-    public void setContactRequest(ContactRequest contactRequest) {
-        this.contactRequest = contactRequest;
     }
 }

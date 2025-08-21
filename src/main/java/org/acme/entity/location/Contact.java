@@ -16,6 +16,9 @@ public class Contact extends BaseEntity {
     @Column(name = "type")
     private ContactType type;
 
+    @Column
+    private boolean enabled;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id")
     private Location location;
@@ -65,5 +68,13 @@ public class Contact extends BaseEntity {
 
     public void setExtLocation(ExtLocation extLocation) {
         this.extLocation = extLocation;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

@@ -40,14 +40,14 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     @Transactional
-    public List<Contact> viewContact(String locationId, String name, String company, ContactType type, boolean isExtLocation, Sort sort, int index, int size) {
-        Map<String, Object> queryParam = HibernateQueryHelper.generateContactQuery("from Contact", name, UUID.fromString(locationId), company, type, isExtLocation);
+    public List<Contact> viewContact(String locationId, String name, String company, ContactType type, boolean isExtLocation, Boolean enabled, Sort sort, int index, int size) {
+        Map<String, Object> queryParam = HibernateQueryHelper.generateContactQuery("from Contact", name, UUID.fromString(locationId), company, type, isExtLocation, enabled);
         return Contact.find((String) queryParam.get(QUERY), sort, (Parameters) queryParam.get(PARAM)).page(index, size).list();
     }
 
     @Override
     @Transactional
-    public boolean insertLocation(Location location){
+    public boolean insertLocation(Location location) {
         location.persistAndFlush();
         return true;
     }
@@ -64,15 +64,15 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     @Transactional
-    public List<Location> viewLocation(String name, String address, LocationType type, Sort sort, int index, int size) {
-        Map<String, Object> queryParam = HibernateQueryHelper.generateLocationQuery("from Location", name, address, type);
+    public List<Location> viewLocation(String name, String address, LocationType type, Boolean enabled, Sort sort, int index, int size) {
+        Map<String, Object> queryParam = HibernateQueryHelper.generateLocationQuery("from Location", name, address, type, enabled);
         return Location.find((String) queryParam.get(QUERY), sort, (Parameters) queryParam.get(PARAM)).page(index, size).list();
     }
 
     @Override
     @Transactional
-    public List<ExtLocation> viewExtLocation(String locationId, String name, String address, LocationType type, Sort sort, int index, int size) {
-        Map<String, Object> queryParam = HibernateQueryHelper.generateExtLocationQuery("from ExtLocation", UUID.fromString(locationId), name, address, type);
+    public List<ExtLocation> viewExtLocation(String locationId, String name, String address, LocationType type, Boolean enabled, Sort sort, int index, int size) {
+        Map<String, Object> queryParam = HibernateQueryHelper.generateExtLocationQuery("from ExtLocation", UUID.fromString(locationId), name, address, type, enabled);
         return ExtLocation.find((String) queryParam.get(QUERY), sort, (Parameters) queryParam.get(PARAM)).page(index, size).list();
     }
 

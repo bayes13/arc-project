@@ -24,6 +24,9 @@ public class Location extends BaseEntity {
     @Column(name = "default_phone")
     private String defaultPhone;
 
+    @Column
+    private boolean enabled;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "location")
     private Set<Inventory> inventoryList = new HashSet<>();
 
@@ -90,5 +93,13 @@ public class Location extends BaseEntity {
 
     public void setContactList(Set<Contact> contactList) {
         this.contactList = contactList;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

@@ -24,6 +24,9 @@ public class ExtLocation extends BaseEntity {
     @Column(name = "default_phone")
     private String defaultPhone;
 
+    @Column
+    private boolean enabled;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id")
     private Location location;
@@ -80,5 +83,13 @@ public class ExtLocation extends BaseEntity {
 
     public void setContactList(Set<Contact> contactList) {
         this.contactList = contactList;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

@@ -9,6 +9,8 @@ public class ContactResponse extends BaseModel {
 
     private String type;
 
+    private boolean enabled;
+
     public ContactResponse() {
     }
 
@@ -36,4 +38,11 @@ public class ContactResponse extends BaseModel {
         this.type = type;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 }

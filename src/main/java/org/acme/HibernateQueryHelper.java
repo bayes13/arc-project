@@ -8,7 +8,7 @@ import java.util.*;
 
 public class HibernateQueryHelper {
 
-    public static Map<String, Object> generateContactQuery(String baseQuery, String name, UUID locationId, String company, ContactType type, boolean isExtLocation) {
+    public static Map<String, Object> generateContactQuery(String baseQuery, String name, UUID locationId, String company, ContactType type, boolean isExtLocation, Boolean enabled) {
         final Map<String, Object> objectMap = new HashMap<>();
         final Parameters parameters = new Parameters();
         final StringBuilder query = new StringBuilder(baseQuery);
@@ -34,6 +34,11 @@ public class HibernateQueryHelper {
                 query.append(" type := type and");
                 parameters.and("type", type);
             }
+            if (Objects.nonNull(enabled)) {
+                query.append(" enabled := enabled and");
+                parameters.and("enabled", enabled);
+            }
+
             query.replace(query.length() - 3, query.length(), "");
         }
 
@@ -42,7 +47,7 @@ public class HibernateQueryHelper {
         return objectMap;
     }
 
-    public static Map<String, Object> generateLocationQuery(String baseQuery, String name, String address, LocationType type) {
+    public static Map<String, Object> generateLocationQuery(String baseQuery, String name, String address, LocationType type, Boolean enabled) {
         final Map<String, Object> objectMap = new HashMap<>();
         final Parameters parameters = new Parameters();
         final StringBuilder query = new StringBuilder(baseQuery);
@@ -61,6 +66,12 @@ public class HibernateQueryHelper {
                 query.append(" type := type and");
                 parameters.and("type", type);
             }
+
+            if (Objects.nonNull(enabled)) {
+                query.append(" enabled := enabled and");
+                parameters.and("enabled", enabled);
+            }
+
             query.replace(query.length() - 3, query.length(), "");
         }
 
@@ -69,7 +80,7 @@ public class HibernateQueryHelper {
         return objectMap;
     }
 
-    public static Map<String, Object> generateExtLocationQuery(String baseQuery, UUID locationId, String name, String address, LocationType type) {
+    public static Map<String, Object> generateExtLocationQuery(String baseQuery, UUID locationId, String name, String address, LocationType type, Boolean enabled) {
         final Map<String, Object> objectMap = new HashMap<>();
         final Parameters parameters = new Parameters();
         final StringBuilder query = new StringBuilder(baseQuery);
@@ -90,6 +101,11 @@ public class HibernateQueryHelper {
                 query.append(" type := type and");
                 parameters.and("type", type);
             }
+            if (Objects.nonNull(enabled)) {
+                query.append(" enabled := enabled and");
+                parameters.and("enabled", enabled);
+            }
+
             query.replace(query.length() - 3, query.length(), "");
         }
 

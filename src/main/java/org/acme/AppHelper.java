@@ -11,6 +11,7 @@ import org.acme.model.enumerate.LocationType;
 import org.acme.model.location.ContactRequest;
 import org.acme.model.location.ContactResponse;
 import org.acme.model.location.LocationRequest;
+import org.acme.model.location.LocationResponse;
 
 import java.util.List;
 import java.util.Objects;
@@ -93,7 +94,7 @@ public class AppHelper {
 
     public static ContactResponse mapToContactResponse(Contact contact) {
         final ContactResponse contactResponse = new ContactResponse();
-        contactResponse.setId(contactResponse.getId());
+        contactResponse.setId(contact.getId().toString());
         contactResponse.setCompany(contact.getCompany());
         contactResponse.setType(contact.getType().name());
         contactResponse.setFullName(contact.getFullName());
@@ -102,6 +103,36 @@ public class AppHelper {
         contactResponse.setCreatedTimestamp(contact.getCreatedTimestamp());
         contactResponse.setUpdatedTimestamp(contact.getUpdatedTimestamp());
         return contactResponse;
+    }
+
+    public static LocationResponse mapToLocationResponse(Location location) {
+        final LocationResponse locationResponse = new LocationResponse();
+        locationResponse.setId(location.getId().toString());
+        locationResponse.setName(location.getName());
+        locationResponse.setType(location.getType().name());
+        locationResponse.setAddress(location.getFullAddress());
+        locationResponse.setDefaultPhone(location.getDefaultPhone());
+        locationResponse.setEnabled(location.isEnabled());
+        locationResponse.setCreatedBy(location.getCreatedBy());
+        locationResponse.setUpdatedBy(location.getUpdatedBy());
+        locationResponse.setCreatedTimestamp(location.getCreatedTimestamp());
+        locationResponse.setUpdatedTimestamp(location.getUpdatedTimestamp());
+        return locationResponse;
+    }
+
+    public static LocationResponse mapToLocationResponse(ExtLocation extLocation) {
+        final LocationResponse locationResponse = new LocationResponse();
+        locationResponse.setId(extLocation.getId().toString());
+        locationResponse.setName(extLocation.getName());
+        locationResponse.setType(extLocation.getType().name());
+        locationResponse.setAddress(extLocation.getFullAddress());
+        locationResponse.setDefaultPhone(extLocation.getDefaultPhone());
+        locationResponse.setEnabled(extLocation.isEnabled());
+        locationResponse.setCreatedBy(extLocation.getCreatedBy());
+        locationResponse.setUpdatedBy(extLocation.getUpdatedBy());
+        locationResponse.setCreatedTimestamp(extLocation.getCreatedTimestamp());
+        locationResponse.setUpdatedTimestamp(extLocation.getUpdatedTimestamp());
+        return locationResponse;
     }
 
 }
