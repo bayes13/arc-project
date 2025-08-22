@@ -14,7 +14,7 @@ public class Location extends BaseEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "name")
+    @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private LocationType type;
 

@@ -2,6 +2,7 @@ package org.acme.serviceImpl;
 
 import io.quarkus.panache.common.Parameters;
 import io.quarkus.panache.common.Sort;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import org.acme.HibernateQueryHelper;
 import org.acme.entity.location.Contact;
@@ -11,8 +12,14 @@ import org.acme.model.enumerate.ContactType;
 import org.acme.model.enumerate.LocationType;
 import org.acme.service.LocationService;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 
+
+@ApplicationScoped
 public class LocationServiceImpl implements LocationService {
 
     private static final String QUERY = "query";

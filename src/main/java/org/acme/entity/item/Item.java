@@ -16,7 +16,7 @@ public class Item extends BaseEntity {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "moq")
+    @Column(name = "category")
     private String category;
 
     @Column(name = "sellable")
