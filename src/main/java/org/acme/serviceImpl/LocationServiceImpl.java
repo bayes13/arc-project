@@ -11,10 +11,7 @@ import org.acme.model.enumerate.ContactType;
 import org.acme.model.enumerate.LocationType;
 import org.acme.service.LocationService;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class LocationServiceImpl implements LocationService {
 
@@ -74,6 +71,45 @@ public class LocationServiceImpl implements LocationService {
     public List<ExtLocation> viewExtLocation(String locationId, String name, String address, LocationType type, Boolean enabled, Sort sort, int index, int size) {
         Map<String, Object> queryParam = HibernateQueryHelper.generateExtLocationQuery("from ExtLocation", UUID.fromString(locationId), name, address, type, enabled);
         return ExtLocation.find((String) queryParam.get(QUERY), sort, (Parameters) queryParam.get(PARAM)).page(index, size).list();
+    }
+
+    @Override
+    @Transactional
+    public boolean updateContact(String id, String name, String company, ContactType type, Boolean enabled) {
+        final Contact currentContact = Contact.findById(UUID.fromString(id));
+        if (currentContact == null) {
+            return false;
+        }
+
+        Optional.ofNullable(name).ifPresent(currentContact::setFullName);
+        Optional.ofNullable(company).ifPresent(currentContact::setCompany);
+        Optional.ofNullable(type).ifPresent(currentContact::setType);
+        Optional.ofNullable(enabled).ifPresent(currentContact::setEnabled);
+
+        return true;
+    }
+
+    @Override
+    @Transactional
+    public boolean updateLocation(String id, String name, String address, LocationType type, String defaultPhone, Boolean enabled, boolean isExtLocation) {
+        if (isExtLocation) {
+            final ExtLocation currentExtLocation = ExtLocation.findById(UUID.fromString(id));
+            Optional.ofNullable(name).ifPresent(currentExtLocation::setName);
+            Optional.ofNullable(address).ifPresent(currentExtLocation::setFullAddress);
+            Optional.ofNullable(type).ifPresent(currentExtLocation::setType);
+            Optional.ofNullable(defaultPhone).ifPresent(currentExtLocation::setDefaultPhone);
+            Optional.ofNullable(enabled).ifPresent(currentExtLocation::setEnabled);
+            return true;
+        }
+
+        final Location currentLocation = Location.findById(UUID.fromString(id));
+        Optional.ofNullable(name).ifPresent(currentLocation::setName);
+        Optional.ofNullable(address).ifPresent(currentLocation::setFullAddress);
+        Optional.ofNullable(type).ifPresent(currentLocation::setType);
+        Optional.ofNullable(defaultPhone).ifPresent(currentLocation::setDefaultPhone);
+        Optional.ofNullable(enabled).ifPresent(currentLocation::setEnabled);
+        return true;
+
     }
 
 

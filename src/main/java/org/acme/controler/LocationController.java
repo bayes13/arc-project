@@ -116,5 +116,35 @@ public class LocationController {
         return Response.ok().entity(responses).build();
     }
 
+    @Path("/updateContact")
+    @POST
+    public Response updateContact(BaseHttpModel<ContactRequest> request) {
+        MDC.put("createdBy", request.getBody().getUpdatedBy());
+        final String id = request.getBody().getId();
+        final String name = request.getBody().getFullName();
+        final ContactType type = ContactType.valueOf(request.getBody().getType());
+        final String company = request.getBody().getCompany();
+        final Boolean enabled = request.getBody().getEnabled();
+        final boolean responses = service.updateContact(id, name, company, type, enabled);
+
+        return Response.ok().entity(responses).build();
+    }
+
+    @Path("/updateLocation")
+    @POST
+    public Response updateLocation(BaseHttpModel<LocationRequest> request) {
+        final String id = request.getBody().getId();
+        final String name = request.getBody().getName();
+        final LocationType type = LocationType.valueOf(request.getBody().getType());
+        final String address = request.getBody().getAddress();
+        final String defaultPhone = request.getBody().getDefaultPhone();
+        final Boolean enabled = request.getBody().getEnabled();
+        final boolean isExtLocation = request.getBody().isExtLocation();
+
+        final boolean responses = service.updateLocation(id, name, address, type, defaultPhone, enabled, isExtLocation);
+
+        return Response.ok().entity(responses).build();
+    }
+
 
 }

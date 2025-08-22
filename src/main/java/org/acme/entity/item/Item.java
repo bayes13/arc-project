@@ -16,6 +16,9 @@ public class Item extends BaseEntity {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "moq")
+    private String category;
+
     @Column(name = "sellable")
     private boolean sellable;
 
@@ -24,10 +27,6 @@ public class Item extends BaseEntity {
 
     @Column(name = "enabled")
     private boolean enabled;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "item_category_id")
-    private ItemCategory itemCategory;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "item")
     private Set<ItemCost> itemCostList = new HashSet<>();
@@ -53,14 +52,6 @@ public class Item extends BaseEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public ItemCategory getItemCategory() {
-        return itemCategory;
-    }
-
-    public void setItemCategory(ItemCategory itemCategory) {
-        this.itemCategory = itemCategory;
     }
 
     public boolean isSellable() {
@@ -93,6 +84,14 @@ public class Item extends BaseEntity {
 
     public void setItemCostList(Set<ItemCost> itemCostList) {
         this.itemCostList = itemCostList;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public Set<Inventory> getInventoryList() {

@@ -25,4 +25,8 @@ public interface LocationService {
     List<ExtLocation> viewExtLocation(String locationId, String name, String address, LocationType type, Boolean enabled,
                                       Sort sort, int index, int size);
 
+    boolean updateContact(String id, String name, String company, ContactType type, Boolean enabled);
+
+    boolean updateLocation(String id,String name, String address, LocationType type, String defaultPhone, Boolean enabled, boolean isExtLocation);
+
 }

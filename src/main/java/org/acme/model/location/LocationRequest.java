@@ -13,6 +13,8 @@ public class LocationRequest extends BaseModel {
 
     private Boolean enabled;
 
+    private boolean isExtLocation;
+
     private ContactRequest contactRequest;
 
     public LocationRequest() {
@@ -56,6 +58,14 @@ public class LocationRequest extends BaseModel {
 
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public boolean isExtLocation() {
+        return isExtLocation;
+    }
+
+    public void setExtLocation(boolean extLocation) {
+        isExtLocation = extLocation;
     }
 
     public ContactRequest getContactRequest() {
