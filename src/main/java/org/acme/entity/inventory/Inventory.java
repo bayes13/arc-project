@@ -1,6 +1,7 @@
 package org.acme.entity.inventory;
 
 import jakarta.persistence.*;
+import org.acme.entity.AuditListener;
 import org.acme.entity.BaseEntity;
 import org.acme.entity.item.Item;
 import org.acme.entity.location.Location;

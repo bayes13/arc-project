@@ -23,13 +23,6 @@ public class AppHelper {
 
     public static Contact generateContactEntity(ContactRequest request) {
         final Contact contact = new Contact();
-        if (request.isExtLocationId()) {
-            final ExtLocation extLocation = new ExtLocation();
-            extLocation.setId(UUID.fromString(request.getLocationId()));
-        } else {
-            final Location location = new Location();
-            location.setId(UUID.fromString(request.getLocationId()));
-        }
         contact.setId(UUID.randomUUID());
         contact.setCompany(request.getCompany());
         contact.setType(ContactType.valueOf(request.getType()));
@@ -37,6 +30,14 @@ public class AppHelper {
 
         return contact;
 
+    }
+
+    public static String validateNullString(String request) {
+        return Objects.nonNull(request) ? request : null;
+    }
+
+    public static boolean validateNullBoolean(Boolean request) {
+        return Objects.nonNull(request) ? request : true;
     }
 
     public static Location generateLocationEntity(LocationRequest request) {
@@ -48,6 +49,8 @@ public class AppHelper {
         location.setFullAddress(request.getAddress());
         location.setType(LocationType.valueOf(request.getType()));
         if (Objects.nonNull(request.getContactRequest())) {
+            request.getContactRequest().setExtLocation(false);
+            request.getContactRequest().setLocationId(locationId.toString());
             final Contact contact = generateContactEntity(request.getContactRequest());
             contact.setLocation(location);
             location.getContactList().add(contact);
@@ -67,8 +70,10 @@ public class AppHelper {
         extLocation.setType(LocationType.valueOf(request.getType()));
         extLocation.setLocation(location);
         if (Objects.nonNull(request.getContactRequest())) {
+            request.getContactRequest().setExtLocation(true);
+            request.getContactRequest().setLocationId(extLocationId.toString());
             final Contact contact = generateContactEntity(request.getContactRequest());
-            contact.setLocation(location);
+            contact.setExtLocation(extLocation);
             extLocation.getContactList().add(contact);
         }
         return extLocation;

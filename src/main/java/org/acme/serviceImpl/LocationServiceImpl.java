@@ -14,7 +14,6 @@ import org.acme.service.LocationService;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,14 +26,14 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     @Transactional
-    public boolean insertContact(Contact contact) {
-        if (Objects.nonNull(contact.getExtLocation().getId())) {
-            final ExtLocation extLocation = ExtLocation.findById(contact.getExtLocation().getId());
+    public boolean insertContact(Contact contact, boolean isExtLocation, UUID locationId) {
+        if (isExtLocation) {
+            final ExtLocation extLocation = ExtLocation.findById(locationId);
             contact.setExtLocation(extLocation);
             extLocation.getContactList().add(contact);
             extLocation.persistAndFlush();
         } else {
-            final Location location = Location.findById(contact.getLocation().getId());
+            final Location location = Location.findById(locationId);
             contact.setLocation(location);
             location.getContactList().add(contact);
             location.persistAndFlush();
@@ -60,9 +59,8 @@ public class LocationServiceImpl implements LocationService {
     @Transactional
     public boolean insertExtLocation(ExtLocation extLocation) {
         final Location location = Location.findById(extLocation.getLocation().getId());
-        location.getExtLocationList().add(extLocation);
         extLocation.setLocation(location);
-        location.persistAndFlush();
+        extLocation.persist();
         return true;
     }
 

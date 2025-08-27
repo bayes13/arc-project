@@ -1,5 +1,4 @@
-package org.acme.controler;
-
+package org.acme.controller;
 
 import io.quarkus.panache.common.Sort;
 import jakarta.inject.Inject;
@@ -21,130 +20,129 @@ import org.acme.service.LocationService;
 import org.slf4j.MDC;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 @Path("/v1/location")
 public class LocationController {
 
+    private static final String CREATED_BY = "createdBy";
     @Inject
     LocationService service;
 
     @Path("/insertContact")
     @POST
     public Response insertContact(BaseHttpModel<ContactRequest> request) {
-        MDC.put("createdBy", request.getBody().getCreatedBy());
-        final Contact contact = AppHelper.generateContactEntity(request.getBody());
-        final boolean isSuccess = service.insertContact(contact);
-        request.getBody().setModificationInfo(AppHelper.generateModificationInfo(isSuccess, null, null));
-        return Response.ok().entity(request).build();
+        setAuditUser(request.getBody().getCreatedBy());
+        Contact contact = AppHelper.generateContactEntity(request.getBody());
 
+        boolean isSuccess = service.insertContact(contact, request.getBody().isExtLocation(), UUID.fromString(request.getBody().getLocationId()));
+
+        request.getBody().setModificationInfo(AppHelper.generateModificationInfo(isSuccess, null, null));
+        return Response.ok(request).build();
     }
 
     @Path("/insertLocation")
     @POST
     public Response insertLocation(BaseHttpModel<LocationRequest> request) {
-        MDC.put("createdBy", request.getBody().getCreatedBy());
-        final Location location = AppHelper.generateLocationEntity(request.getBody());
-        final boolean isSuccess = service.insertLocation(location);
+        setAuditUser(request.getBody().getCreatedBy());
+        Location location = AppHelper.generateLocationEntity(request.getBody());
+
+        boolean isSuccess = service.insertLocation(location);
         request.getBody().setModificationInfo(AppHelper.generateModificationInfo(isSuccess, null, null));
-        return Response.ok().entity(request).build();
+
+        return Response.ok(request).build();
     }
 
     @Path("/insertExtLocation")
     @POST
     public Response insertExtLocation(BaseHttpModel<LocationRequest> request) {
-        MDC.put("createdBy", request.getBody().getCreatedBy());
-        final ExtLocation extLocation = AppHelper.generateExtLocationEntity(request.getBody());
-        final boolean isSuccess = service.insertExtLocation(extLocation);
+        setAuditUser(request.getBody().getCreatedBy());
+        ExtLocation extLocation = AppHelper.generateExtLocationEntity(request.getBody());
+
+        boolean isSuccess = service.insertExtLocation(extLocation);
         request.getBody().setModificationInfo(AppHelper.generateModificationInfo(isSuccess, null, null));
-        return Response.ok().entity(request).build();
+
+        return Response.ok(request).build();
     }
 
     @Path("/viewContact")
     @POST
     public Response viewContact(BaseHttpModel<ContactRequest> request) {
-        final String fullName = request.getBody().getFullName();
-        final String company = request.getBody().getCompany();
-        final ContactType type = ContactType.valueOf(request.getBody().getType());
-        final String locationId = request.getBody().getLocationId();
-        final boolean isExtLocationId = request.getBody().isExtLocationId();
-        final Boolean enabled = request.getBody().getEnabled();
-        final Sort sort = AppHelper.generatedSortedRequest(request.getPageMetaData().getSortList(), "name", Sort.Direction.Ascending);
-        final int index = request.getPageMetaData().getIndex();
-        final int size = request.getPageMetaData().getSize();
+        ContactRequest body = request.getBody();
+        Sort sort = buildSort(request);
 
-        final List<ContactResponse> responses = service.viewContact(locationId, fullName, company, type, isExtLocationId, enabled, sort, index, size)
-                .stream().map(AppHelper::mapToContactResponse)
-                .toList();
+        List<ContactResponse> responses = service.viewContact(AppHelper.validateNullString(body.getLocationId()),
+                AppHelper.validateNullString(body.getFullName()), AppHelper.validateNullString(body.getCompany()),
+                parseEnum(body.getType(), ContactType.class), body.isExtLocation(), AppHelper.validateNullBoolean(body.getEnabled()),
+                sort, request.getPageMetaData().getIndex(), request.getPageMetaData().getSize()).stream().map(AppHelper::mapToContactResponse).toList();
 
-        return Response.ok().entity(responses).build();
+        return Response.ok(responses).build();
     }
 
     @Path("/viewLocation")
     @POST
     public Response viewLocation(BaseHttpModel<LocationRequest> request) {
-        final String name = request.getBody().getName();
-        final LocationType type = LocationType.valueOf(request.getBody().getType());
-        final String address = request.getBody().getAddress();
-        final Boolean enabled = request.getBody().getEnabled();
-        final Sort sort = AppHelper.generatedSortedRequest(request.getPageMetaData().getSortList(), "name", Sort.Direction.Ascending);
-        final int index = request.getPageMetaData().getIndex();
-        final int size = request.getPageMetaData().getSize();
+        LocationRequest body = request.getBody();
+        Sort sort = buildSort(request);
 
-        final List<LocationResponse> responses = service.viewLocation(name, address, type, enabled, sort, index, size)
-                .stream().map(AppHelper::mapToLocationResponse)
-                .toList();
+        List<LocationResponse> responses = service.viewLocation(AppHelper.validateNullString(body.getName()),
+                AppHelper.validateNullString(body.getAddress()), parseEnum(body.getType(), LocationType.class),
+                AppHelper.validateNullBoolean(body.getEnabled()), sort, request.getPageMetaData().getIndex(),
+                request.getPageMetaData().getSize()).stream().map(AppHelper::mapToLocationResponse).toList();
 
-        return Response.ok().entity(responses).build();
+        return Response.ok(responses).build();
     }
 
     @Path("/viewExtLocation")
     @POST
     public Response viewExtLocation(BaseHttpModel<LocationRequest> request) {
-        final String locationId = request.getBody().getId();
-        final String name = request.getBody().getName();
-        final LocationType type = LocationType.valueOf(request.getBody().getType());
-        final String address = request.getBody().getAddress();
-        final Boolean enabled = request.getBody().getEnabled();
-        final Sort sort = AppHelper.generatedSortedRequest(request.getPageMetaData().getSortList(), "name", Sort.Direction.Ascending);
-        final int index = request.getPageMetaData().getIndex();
-        final int size = request.getPageMetaData().getSize();
+        LocationRequest body = request.getBody();
+        Sort sort = buildSort(request);
 
-        final List<LocationResponse> responses = service.viewExtLocation(locationId, name, address, type, enabled, sort, index, size)
-                .stream().map(AppHelper::mapToLocationResponse)
-                .toList();
+        List<LocationResponse> responses = service.viewExtLocation(body.getId(), AppHelper.validateNullString(body.getName()),
+                AppHelper.validateNullString(body.getAddress()), parseEnum(body.getType(), LocationType.class),
+                AppHelper.validateNullBoolean(body.getEnabled()), sort, request.getPageMetaData().getIndex(),
+                request.getPageMetaData().getSize()).stream().map(AppHelper::mapToLocationResponse).toList();
 
-        return Response.ok().entity(responses).build();
+        return Response.ok(responses).build();
     }
+
 
     @Path("/updateContact")
     @POST
     public Response updateContact(BaseHttpModel<ContactRequest> request) {
-        MDC.put("createdBy", request.getBody().getUpdatedBy());
-        final String id = request.getBody().getId();
-        final String name = request.getBody().getFullName();
-        final ContactType type = ContactType.valueOf(request.getBody().getType());
-        final String company = request.getBody().getCompany();
-        final Boolean enabled = request.getBody().getEnabled();
-        final boolean responses = service.updateContact(id, name, company, type, enabled);
+        setAuditUser(request.getBody().getUpdatedBy());
+        ContactRequest body = request.getBody();
 
-        return Response.ok().entity(responses).build();
+        boolean result = service.updateContact(body.getId(), AppHelper.validateNullString(body.getFullName()),
+                AppHelper.validateNullString(body.getCompany()), parseEnum(body.getType(), ContactType.class), body.getEnabled());
+
+        return Response.ok(result).build();
     }
 
     @Path("/updateLocation")
     @POST
     public Response updateLocation(BaseHttpModel<LocationRequest> request) {
-        final String id = request.getBody().getId();
-        final String name = request.getBody().getName();
-        final LocationType type = LocationType.valueOf(request.getBody().getType());
-        final String address = request.getBody().getAddress();
-        final String defaultPhone = request.getBody().getDefaultPhone();
-        final Boolean enabled = request.getBody().getEnabled();
-        final boolean isExtLocation = request.getBody().isExtLocation();
+        LocationRequest body = request.getBody();
 
-        final boolean responses = service.updateLocation(id, name, address, type, defaultPhone, enabled, isExtLocation);
+        boolean result = service.updateLocation(body.getId(), AppHelper.validateNullString(body.getName()),
+                AppHelper.validateNullString(body.getAddress()), parseEnum(body.getType(), LocationType.class),
+                AppHelper.validateNullString(body.getDefaultPhone()), body.getEnabled(), body.isExtLocation());
 
-        return Response.ok().entity(responses).build();
+        return Response.ok(result).build();
     }
 
 
+    private void setAuditUser(String user) {
+        MDC.put(CREATED_BY, user);
+    }
+
+    private Sort buildSort(BaseHttpModel<?> request) {
+        return AppHelper.generatedSortedRequest(request.getPageMetaData().getSortList(), "name", Sort.Direction.Ascending);
+    }
+
+    private <E extends Enum<E>> E parseEnum(String value, Class<E> enumClass) {
+        return (Objects.nonNull(value)) ? Enum.valueOf(enumClass, value) : null;
+    }
 }

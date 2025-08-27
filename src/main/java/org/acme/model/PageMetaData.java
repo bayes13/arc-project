@@ -4,35 +4,35 @@ package org.acme.model;
 import java.util.List;
 
 public class PageMetaData {
-    private Integer index;
-    private Integer size;
-    private Integer totalData;
+    private int index;
+    private int size;
+    private int totalData;
     List<Sort> sortList;
 
     public PageMetaData() {
     }
 
-    public Integer getIndex() {
+    public int getIndex() {
         return index;
     }
 
-    public void setIndex(Integer index) {
+    public void setIndex(int index) {
         this.index = index;
     }
 
-    public Integer getSize() {
+    public int getSize() {
         return size;
     }
 
-    public void setSize(Integer size) {
+    public void setSize(int size) {
         this.size = size;
     }
 
-    public Integer getTotalData() {
+    public int getTotalData() {
         return totalData;
     }
 
-    public void setTotalData(Integer totalData) {
+    public void setTotalData(int totalData) {
         this.totalData = totalData;
     }
 

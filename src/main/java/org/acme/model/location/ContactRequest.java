@@ -11,7 +11,8 @@ public class ContactRequest extends BaseModel {
 
     private String locationId;
 
-    private boolean isExtLocationId;
+    private boolean extLocation;
+
     private Boolean enabled;
 
     public ContactRequest() {
@@ -49,12 +50,12 @@ public class ContactRequest extends BaseModel {
         this.locationId = locationId;
     }
 
-    public boolean isExtLocationId() {
-        return isExtLocationId;
+    public boolean isExtLocation() {
+        return extLocation;
     }
 
-    public void setExtLocationId(boolean extLocationId) {
-        isExtLocationId = extLocationId;
+    public void setExtLocation(boolean extLocation) {
+        this.extLocation = extLocation;
     }
 
     public Boolean getEnabled() {

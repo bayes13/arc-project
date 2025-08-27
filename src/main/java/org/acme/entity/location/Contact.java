@@ -1,6 +1,7 @@
 package org.acme.entity.location;
 
 import jakarta.persistence.*;
+import org.acme.entity.AuditListener;
 import org.acme.entity.BaseEntity;
 import org.acme.model.enumerate.ContactType;
 
@@ -16,7 +17,7 @@ public class Contact extends BaseEntity {
     @Column(name = "type")
     private ContactType type;
 
-    @Column
+    @Column(name = "enabled", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean enabled;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

@@ -1,6 +1,7 @@
 package org.acme.entity.inventory;
 
 import jakarta.persistence.*;
+import org.acme.entity.AuditListener;
 import org.acme.entity.BaseEntity;
 import org.acme.model.enumerate.InventoryLogType;
 import org.acme.model.enumerate.ReferenceType;

@@ -1,8 +1,16 @@
 package org.acme.entity.location;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import org.acme.entity.BaseEntity;
-import org.acme.entity.BaseEntityId;
 import org.acme.model.enumerate.LocationType;
 
 import java.util.HashSet;
@@ -24,7 +32,7 @@ public class ExtLocation extends BaseEntity {
     @Column(name = "default_phone")
     private String defaultPhone;
 
-    @Column
+    @Column(name = "enabled", columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean enabled;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

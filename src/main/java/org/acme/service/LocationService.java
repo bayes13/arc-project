@@ -8,10 +8,11 @@ import org.acme.model.enumerate.ContactType;
 import org.acme.model.enumerate.LocationType;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface LocationService {
 
-    boolean insertContact(Contact contact);
+    boolean insertContact(Contact contact, boolean isExtLocation, UUID LocationId);
 
     List<Contact> viewContact(String locationId, String name, String company, ContactType type, boolean isExtLocation, Boolean enabled,
                               Sort sort, int index, int size);
