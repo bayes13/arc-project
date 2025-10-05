@@ -1,6 +1,8 @@
 package org.acme;
 
 import io.quarkus.panache.common.Sort;
+import org.acme.entity.item.Item;
+import org.acme.entity.item.ItemCost;
 import org.acme.entity.location.Contact;
 import org.acme.entity.location.ExtLocation;
 import org.acme.entity.location.Location;
@@ -8,6 +10,10 @@ import org.acme.model.BaseModel;
 import org.acme.model.PageMetaData;
 import org.acme.model.enumerate.ContactType;
 import org.acme.model.enumerate.LocationType;
+import org.acme.model.item.ItemCostRequest;
+import org.acme.model.item.ItemCostResponse;
+import org.acme.model.item.ItemRequest;
+import org.acme.model.item.ItemResponse;
 import org.acme.model.location.ContactRequest;
 import org.acme.model.location.ContactResponse;
 import org.acme.model.location.LocationRequest;
@@ -30,6 +36,39 @@ public class AppHelper {
 
         return contact;
 
+    }
+
+    public static Item generateItemEntity(ItemRequest request) {
+        final Item item = new Item();
+        item.setId(UUID.randomUUID());
+        item.setCategory(request.getCategory());
+        item.setMoq(request.getMoq());
+        item.setUnitType(request.getUnitType());
+        item.setName(request.getName());
+        item.setEnabled(request.isEnable());
+        item.setSellable(request.isSellable());
+        item.setSku(request.getSku());
+
+        return item;
+    }
+
+    public static ItemCost generateItemCostEntity(ItemCostRequest request) {
+        final Item item = new Item();
+        item.setId(UUID.fromString(request.getItemId()));
+        final ItemCost itemCost = new ItemCost();
+        itemCost.setId(UUID.randomUUID());
+        itemCost.setItem(item);
+        itemCost.setPriority(request.getPriority());
+        itemCost.setCost(request.getCost());
+        itemCost.setQuantity(request.getQty());
+        itemCost.setSupplier(request.getSupplier());
+        itemCost.setEntryDate(request.getEntryDate());
+        itemCost.setReferenceNumber(request.getReferenceNo());
+        itemCost.setReferenceType(request.getReferenceType());
+
+
+        item.getItemCostList().add(itemCost);
+        return itemCost;
     }
 
     public static String validateNullString(String request) {
@@ -95,6 +134,40 @@ public class AppHelper {
             }
             return sort;
         }
+    }
+
+    public static ItemResponse mapToItemResponse(Item item) {
+        final ItemResponse itemResponse = new ItemResponse();
+        itemResponse.setId(item.getId().toString());
+        itemResponse.setName(item.getName());
+        itemResponse.setCategory(item.getCategory());
+        itemResponse.setMoq(item.getMoq());
+        itemResponse.setSku(item.getSku());
+        itemResponse.setUnitType(item.getUnitType());
+        itemResponse.setEnable(item.isEnabled());
+        itemResponse.setSellable(item.isSellable());
+        itemResponse.setCreatedBy(item.getCreatedBy());
+        itemResponse.setUpdatedBy(item.getUpdatedBy());
+        itemResponse.setCreatedTimestamp(item.getCreatedTimestamp());
+        itemResponse.setUpdatedTimestamp(item.getUpdatedTimestamp());
+        return itemResponse;
+    }
+
+    public static ItemCostResponse mapToItemCostResponse(ItemCost itemCost) {
+        final ItemCostResponse itemResponse = new ItemCostResponse();
+        itemResponse.setId(itemCost.getId().toString());
+        itemResponse.setCost(itemCost.getCost());
+        itemResponse.setQty(itemCost.getQuantity());
+        itemResponse.setPriority(itemCost.getPriority());
+        itemResponse.setReferenceNo(itemCost.getReferenceNumber());
+        itemResponse.setEntryDate(itemCost.getEntryDate());
+        itemResponse.setSupplier(itemCost.getSupplier());
+        itemResponse.setReferenceType(itemCost.getReferenceType());
+        itemResponse.setCreatedBy(itemCost.getCreatedBy());
+        itemResponse.setUpdatedBy(itemCost.getUpdatedBy());
+        itemResponse.setCreatedTimestamp(itemCost.getCreatedTimestamp());
+        itemResponse.setUpdatedTimestamp(itemCost.getUpdatedTimestamp());
+        return itemResponse;
     }
 
     public static ContactResponse mapToContactResponse(Contact contact) {

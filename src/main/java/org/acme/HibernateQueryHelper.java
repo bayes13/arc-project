@@ -3,7 +3,9 @@ package org.acme;
 import io.quarkus.panache.common.Parameters;
 import org.acme.model.enumerate.ContactType;
 import org.acme.model.enumerate.LocationType;
+import org.acme.model.enumerate.ReferenceType;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +19,72 @@ public class HibernateQueryHelper {
     private static final String LOCATION_ID = "location.id";
     private static final String QUERY = "query";
     private static final String PARAM = "param";
+
+    public static Map<String, Object> itemQuery(String baseQuery, String name, String category, String unitType, boolean sellable, boolean enabled) {
+        final Map<String, Object> objectMap = new HashMap<>();
+        final Parameters parameters = new Parameters();
+        final StringBuilder query = new StringBuilder(baseQuery).append(" where 1=1");
+
+        if (Objects.nonNull(name)) {
+            query.append(" and name like :name");
+            parameters.and("name", likeParameter(name));
+        }
+
+        if (Objects.nonNull(category)) {
+            query.append(" and category like :category");
+            parameters.and("address", likeParameter(category));
+        }
+
+        if (Objects.nonNull(unitType)) {
+            query.append(" and unitType like :unitType");
+            parameters.and("company", likeParameter(unitType));
+        }
+        query.append(" and sellable = :sellable");
+        parameters.and("sellable", sellable);
+
+
+        query.append(" and enabled = :enabled");
+        parameters.and("enabled", enabled);
+
+
+        objectMap.put(QUERY, query.toString());
+        objectMap.put(PARAM, parameters);
+        return objectMap;
+
+    }
+
+    public static Map<String, Object> itemCostQuery(String baseQuery, String itemId, String referenceNo, ReferenceType referenceType, LocalDateTime startDate, LocalDateTime endDate) {
+        final Map<String, Object> objectMap = new HashMap<>();
+        final Parameters parameters = new Parameters();
+        final StringBuilder query = new StringBuilder(baseQuery).append(" where 1=1");
+
+        if (Objects.nonNull(itemId)) {
+            query.append(" and itemId = :itemId");
+            parameters.and("itemId", itemId);
+        }
+
+        if (Objects.nonNull(referenceNo)) {
+            query.append(" and referenceNo like :referenceNo");
+            parameters.and("referenceNo", likeParameter(referenceNo));
+        }
+
+        if (Objects.nonNull(referenceType)) {
+            query.append(" and referenceType = :unitType");
+            parameters.and("referenceType", referenceType);
+        }
+
+        if (Objects.nonNull(startDate) && Objects.nonNull(endDate)) {
+            query.append(" and entry_date >= :startDate and entry_date < :endDate");
+            parameters.and("startDate", startDate);
+            parameters.and("endDate", endDate);
+        }
+
+        objectMap.put(QUERY, query.toString());
+        objectMap.put(PARAM, parameters);
+        return objectMap;
+
+    }
+
 
     public static Map<String, Object> buildBaseLocationQuery(String baseQuery, String locationField, UUID locationId, String name, String address, String company, Enum<?> type, Boolean enabled
     ) {

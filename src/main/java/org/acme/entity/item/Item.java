@@ -1,7 +1,11 @@
 package org.acme.entity.item;
 
-import jakarta.persistence.*;
-import org.acme.entity.AuditListener;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import org.acme.entity.BaseEntity;
 import org.acme.entity.inventory.Inventory;
 
@@ -16,6 +20,9 @@ public class Item extends BaseEntity {
 
     @Column(name = "name")
     private String name;
+
+    @Column(name = "unit_type")
+    private String unitType;
 
     @Column(name = "category")
     private String category;
@@ -69,6 +76,14 @@ public class Item extends BaseEntity {
 
     public void setMoq(int moq) {
         this.moq = moq;
+    }
+
+    public String getUnitType() {
+        return unitType;
+    }
+
+    public void setUnitType(String unitType) {
+        this.unitType = unitType;
     }
 
     public boolean isEnabled() {

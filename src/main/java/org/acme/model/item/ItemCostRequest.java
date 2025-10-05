@@ -1,53 +1,40 @@
-package org.acme.entity.item;
+package org.acme.model.item;
 
-import jakarta.persistence.*;
-import org.acme.entity.AuditListener;
-import org.acme.entity.BaseEntity;
+import org.acme.model.BaseModel;
 import org.acme.model.enumerate.ReferenceType;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "item_cost")
-public class ItemCost extends BaseEntity {
-
-    @Column(name = "ref_number")
-    private String referenceNumber;
-
-    @Column(name = "reference_type")
-    @Enumerated(EnumType.STRING)
+public class ItemCostRequest extends BaseModel {
+    private String itemId;
+    private String referenceNo;
     private ReferenceType referenceType;
-
-    @Column(name = "entry_date")
     private LocalDateTime entryDate;
-
-    @Column(name = "priority")
     private int priority;
-
-    @Column(name = "quantity")
-    private int quantity;
-
-    @Column(name = "cost")
+    private int qty;
     private BigDecimal cost;
-
-    @Column(name = "supplier")
     private String supplier;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "item_id")
-    private Item item;
-
-    public ItemCost() {
-        super();
+    public ItemCostRequest() {
     }
 
-    public String getReferenceNumber() {
-        return referenceNumber;
+    public String getItemId() {
+        return itemId;
     }
 
-    public void setReferenceNumber(String referenceNumber) {
-        this.referenceNumber = referenceNumber;
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
+    }
+
+    public String getReferenceNo() {
+        return referenceNo;
+    }
+
+    public void setReferenceNo(String referenceNo) {
+        this.referenceNo = referenceNo;
     }
 
     public ReferenceType getReferenceType() {
@@ -74,12 +61,12 @@ public class ItemCost extends BaseEntity {
         this.priority = priority;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public int getQty() {
+        return qty;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setQty(int qty) {
+        this.qty = qty;
     }
 
     public BigDecimal getCost() {
@@ -98,11 +85,19 @@ public class ItemCost extends BaseEntity {
         this.supplier = supplier;
     }
 
-    public Item getItem() {
-        return item;
+    public LocalDateTime getStartDate() {
+        return startDate;
     }
 
-    public void setItem(Item item) {
-        this.item = item;
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
     }
 }
