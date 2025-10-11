@@ -40,6 +40,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public List<String> getItemCategory() {
+        return Item.find("select distinct category from Item")
+                .project(String.class)
+                .list();
+    }
+
+    @Override
     @Transactional
     public boolean insertItem(Item item) {
         item.persist();
@@ -79,10 +86,8 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public boolean updateItemCostPriority(String id, int priority) {
-
         final ItemCost currentItemCost = ItemCost.findById(id);
         currentItemCost.setPriority(priority);
-
         return true;
     }
 }

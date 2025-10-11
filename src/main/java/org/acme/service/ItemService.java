@@ -13,11 +13,13 @@ public interface ItemService {
 
     List<ItemCost> viewItemCost(String itemId, String referenceNo, ReferenceType referenceType, LocalDateTime startDate, LocalDateTime endDate, Sort sort, int index, int size);
 
+    List<String> getItemCategory();
+
     boolean insertItem(Item item);
 
     boolean insertItemCost(ItemCost itemCost);
 
-    boolean updateItem(String id,String name, String category, String unitType, boolean sellable, boolean enabled);
+    boolean updateItem(String id, String name, String category, String unitType, boolean sellable, boolean enabled);
 
     boolean updateItemCost(String id, int qty, String supplier);
 

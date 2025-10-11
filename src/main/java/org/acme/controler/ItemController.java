@@ -2,6 +2,7 @@ package org.acme.controler;
 
 import io.quarkus.panache.common.Sort;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
@@ -82,6 +83,49 @@ public class ItemController {
 
         return Response.ok(responses).build();
     }
+
+    @Path("/getCategories")
+    @GET
+    public Response getCategories() {
+        final List<String> responses = service.getItemCategory();
+        return Response.ok(responses).build();
+    }
+
+    @Path("/updateItem")
+    public Response updateItem(BaseHttpModel<ItemRequest> request) {
+        setAuditUser(request.getBody().getCreatedBy());
+        final ItemRequest body = request.getBody();
+
+        final boolean isUpdated = service.updateItem(body.getId(), body.getName(), body.getCategory(), body.getUnitType(), body.isSellable(), body.isEnable());
+        request.getBody().getModificationInfo().setSuccess(isUpdated);
+        return Response.ok(request)
+                .build();
+    }
+
+    @Path("/updateItemCost")
+    public Response updateItemCost(BaseHttpModel<ItemCostRequest> request) {
+        setAuditUser(request.getBody().getCreatedBy());
+        final ItemCostRequest body = request.getBody();
+
+        final boolean isUpdated = service.updateItemCost(body.getId(),body.getQty(),body.getSupplier());
+        request.getBody().getModificationInfo().setSuccess(isUpdated);
+        return Response.ok(request)
+                .build();
+    }
+
+    @Path("/updateItemCost")
+    public Response updateCostPriority(BaseHttpModel<ItemCostRequest> request) {
+        setAuditUser(request.getBody().getCreatedBy());
+        final ItemCostRequest body = request.getBody();
+
+        final boolean isUpdated = service.updateItemCostPriority(body.getId(),body.getPriority());
+        request.getBody().getModificationInfo().setSuccess(isUpdated);
+        return Response.ok(request)
+                .build();
+    }
+
+
+
 
     private void setAuditUser(String user) {
         MDC.put(CREATED_BY, user);
